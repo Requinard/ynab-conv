@@ -1,4 +1,4 @@
-import csv
+import util
 
 
 def transform(input, output):
@@ -10,27 +10,14 @@ def transform(input, output):
             continue
         new_row = []
 
-        # Add date time
         year = row[0][:4]
         month = row[0][4:6]
         day = row[0][6:8]
-        new_row.append("{0}/{1}/{2}".format(day, month, year))
+        datetime = "{0}/{1}/{2}".format(day, month, year)
 
-
-        # Add payee
-        new_row.append(row[1])
-
-        # Category
-        new_row.append(row[4])
-
-        # Memo
-        new_row.append(row[8])
-
-        if(row[5] == "Af"):
-            new_row.append(row[6])
-            new_row.append(" ")
+        if (row[5] == "Af"):
+            new_row = util.format_output(datetime, row[1], row[4], row[8], row[6], " ")
         else:
-            new_row.append(" ")
-            new_row.append(row[6])
+            new_row = util.format_output(datetime, row[1], row[4], row[8], " ", row[6])
 
         output.append(new_row)
