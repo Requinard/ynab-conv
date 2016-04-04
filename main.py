@@ -30,6 +30,16 @@ def write_output(output_file, output_array):
         output_file.write("\r")
 
 
+def open_file(input_file, input_file_string, delimiter=","):
+    try:
+        input_file = csv.reader(open(input_file_string, "r"), delimiter=delimiter, quotechar="|")
+    except Exception as e:
+        print("Could not open input file" + str(e))
+        return 3
+
+    return input_file
+
+
 def main(*args, **kwargs):
     # Parse args
     parser = get_arg_parser()
@@ -73,26 +83,23 @@ def main(*args, **kwargs):
     print("Starting transformations")
 
     if bank == "ing":
-        try:
-            input_file = csv.reader(open(input_file_string, "r"), delimiter=",", quotechar="|")
-        except Exception as e:
-            print("Could not open input file" + str(e))
-            return 3
+        input_file = open_file(input_file, input_file_string, ",")
+
         print("Transforming from ING")
+
         ing.transform(input_file, output_array)
     elif bank == "knab":
-        try:
-            input_file = csv.reader(open(input_file_string, "r"), delimiter=";", quotechar="|")
-        except Exception as e:
-            print("Could not open input file" + str(e))
-            return 3
+        input_file = open_file(input_file, input_file_string, ";")
+
         print("Transforming from Knab")
+
         knab.transform(input_file, output_array)
 
     if verbose:
         print(output_array)
 
-    if len(output_array)> 0:
+    if len(output_array) > 0:
+        print("Writing output")
         write_output(output_file, output_array)
 
     output_file.close()
