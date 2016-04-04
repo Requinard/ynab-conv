@@ -2,11 +2,9 @@ import csv
 
 
 def transform(input, output):
-    spamreader = csv.reader(csvfile, delimiter=',', quotechar='"')
-
     is_start = True
 
-    for row in spamreader:
+    for row in input:
         if is_start:
             is_start = False
             continue
@@ -35,4 +33,4 @@ def transform(input, output):
             new_row.append(" ")
             new_row.append(row[6])
 
-        output_file.append(new_row)
+        output.append(new_row)
